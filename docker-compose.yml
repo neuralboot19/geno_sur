@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    container_name: geno-sur-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    volumes:
+      - 'dbdata:/var/lib/postgresql/data'
+  web:
+    build: .
+    image: geno-sur
+    container_name: geno-sur-web
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - .:/app
